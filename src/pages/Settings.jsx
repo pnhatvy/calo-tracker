@@ -1,44 +1,52 @@
-import { useState } from "react";
-import { IoTrashOutline, IoCloudUploadOutline } from "react-icons/io5";
-
-export default function Settings({ isActive, goal, setGoal, setHistory }) {
-  const [isSyncing, setIsSyncing] = useState(false);
-
-  const mockSync = () => {
-    setIsSyncing(true);
-    setTimeout(() => {
-      setIsSyncing(false);
-      alert("Backup lên Cloud thành công!");
-    }, 1500);
-  };
-
-  const resetData = () => {
-    if (window.confirm("Xoá toàn bộ dữ liệu? Không thể khôi phục!"))
-      setHistory([]);
-  };
-
+export default function Settings({
+  isActive,
+  goal,
+  setGoal,
+  isDarkMode,
+  setIsDarkMode,
+  setHistory,
+}) {
   return (
     <section className={`page ${isActive ? "active" : ""}`}>
       <header>
-        <h1>Cài đặt</h1>
+        <h1>Settings</h1>
       </header>
-      <div className="setting-group">
-        <div className="setting-item" onClick={mockSync}>
-          <span>{isSyncing ? "Đang đồng bộ..." : "Backup & Sync (Cloud)"}</span>
-          <IoCloudUploadOutline size={22} color="var(--primary-green)" />
-        </div>
+      <div className="card">
         <div className="setting-item">
-          <span>Mục tiêu Kcal/ngày</span>
+          <span>Dark Mode</span>
+          <div
+            className={`toggle-switch ${isDarkMode ? "" : "off"}`}
+            onClick={() => setIsDarkMode(!isDarkMode)}
+          ></div>
+        </div>
+        <div
+          className="setting-item"
+          style={{ paddingTop: "24px", border: "none" }}
+        >
+          <span>Daily Target</span>
           <input
             type="number"
             value={goal}
             onChange={(e) => setGoal(Number(e.target.value))}
-            className="inline-input"
+            style={{
+              width: "80px",
+              margin: 0,
+              padding: "8px 12px",
+              textAlign: "right",
+            }}
           />
         </div>
-        <div className="setting-item danger" onClick={resetData}>
-          <span>Xoá toàn bộ dữ liệu</span>
-          <IoTrashOutline size={22} />
+      </div>
+
+      <div className="card">
+        <div
+          className="setting-item"
+          style={{ color: "var(--danger)", cursor: "pointer", border: "none" }}
+          onClick={() => {
+            if (window.confirm("Erase all data?")) setHistory([]);
+          }}
+        >
+          <span>Clear All Data</span>
         </div>
       </div>
     </section>

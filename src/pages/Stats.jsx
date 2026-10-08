@@ -1,25 +1,38 @@
 export default function Stats({ isActive, history }) {
+  // Tính tổng Kcal toàn thời gian
+  const totalKcal = history?.reduce((sum, item) => sum + item.kcal, 0) || 0;
+  const totalMeals = history?.length || 0;
+
   return (
     <section className={`page ${isActive ? "active" : ""}`}>
       <header>
-        <h1>Thống kê</h1>
+        <h1>Statistics</h1>
+        <p className="subtitle">Insights & Analytics</p>
       </header>
-      <div className="stats-card">
-        <h3>Hiệu quả Calo / VNĐ</h3>
-        <p className="subtitle">Đề xuất món tối ưu chi phí</p>
-        <div className="insight-box">
-          {history.length > 0 ? (
-            history.map((h) =>
-              h.cost > 0 && h.kcal > 0 ? (
-                <div key={h.id} className="insight-row">
-                  <span>{h.name}</span>
-                  <strong>{Math.round(h.cost / h.kcal)} đ/kcal</strong>
-                </div>
-              ) : null,
-            )
-          ) : (
-            <p>Chưa đủ dữ liệu</p>
-          )}
+
+      <div className="card">
+        <h3 style={{ margin: "0 0 16px", fontSize: "18px" }}>Overview</h3>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            borderBottom: "0.5px solid rgba(142, 142, 147, 0.2)",
+            paddingBottom: "16px",
+            marginBottom: "16px",
+          }}
+        >
+          <span style={{ color: "var(--text-sub)", fontWeight: "500" }}>
+            Total Meals Tracked
+          </span>
+          <strong style={{ fontSize: "17px" }}>{totalMeals}</strong>
+        </div>
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <span style={{ color: "var(--text-sub)", fontWeight: "500" }}>
+            All-time Kcal
+          </span>
+          <strong style={{ fontSize: "17px", color: "var(--primary)" }}>
+            {totalKcal.toLocaleString()}
+          </strong>
         </div>
       </div>
     </section>

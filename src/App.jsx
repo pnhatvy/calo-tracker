@@ -1,56 +1,55 @@
 import { useState, useEffect } from "react";
-import Home from "./pages/Home";
+import Dashboard from "./pages/Dashboard";
+import AddRecord from "./pages/AddRecord";
 import Plan from "./pages/Plan";
 import History from "./pages/History";
-import Stats from "./pages/Stats";
 import Settings from "./pages/Settings";
 import BottomNav from "./components/BottomNav";
 import "./App.css";
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState("home");
+  const [activeTab, setActiveTab] = useState("dashboard");
   const [goal, setGoal] = useState(2000);
-  const [budget, setBudget] = useState(500000);
   const [history, setHistory] = useState([]);
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
-  // Lấy dữ liệu khi mở app
   useEffect(() => {
-    const savedData = JSON.parse(localStorage.getItem("caloAppData"));
+    const savedData = JSON.parse(localStorage.getItem("caloAppV2"));
     if (savedData) {
       setGoal(savedData.goal || 2000);
-      setBudget(savedData.budget || 500000);
       setHistory(savedData.history || []);
+      setIsDarkMode(savedData.isDarkMode || false);
     }
   }, []);
 
-  // Tự động lưu khi state thay đổi
   useEffect(() => {
     localStorage.setItem(
-      "caloAppData",
-      JSON.stringify({ goal, budget, history }),
+      "caloAppV2",
+      JSON.stringify({ goal, history, isDarkMode }),
     );
-  }, [goal, budget, history]);
+  }, [goal, history, isDarkMode]);
 
   return (
-    <div className="app-container">
-      <Home
-        isActive={activeTab === "home"}
+    <div className="app-container" data-theme={isDarkMode ? "dark" : "light"}>
+      <Dashboard
+        isActive={activeTab === "dashboard"}
         goal={goal}
         history={history}
-        setHistory={setHistory}
       />
-      <Plan
-        isActive={activeTab === "plan"}
-        budget={budget}
-        setBudget={setBudget}
+      <AddRecord
+        isActive={activeTab === "add"}
         history={history}
+        setHistory={setHistory}
+        setActiveTab={setActiveTab}
       />
+      <Plan isActive={activeTab === "plan"} />
       <History isActive={activeTab === "history"} history={history} />
-      <Stats isActive={activeTab === "stats"} history={history} />
       <Settings
         isActive={activeTab === "settings"}
         goal={goal}
         setGoal={setGoal}
+        isDarkMode={isDarkMode}
+        setIsDarkMode={setIsDarkMode}
         setHistory={setHistory}
       />
 
