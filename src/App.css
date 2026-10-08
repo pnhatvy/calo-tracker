@@ -1,103 +1,54 @@
+/* (Giữ nguyên các biến màu :root và cấu trúc body/app-container từ bản trước) */
 :root {
-  --bg-color: #F2F2F7;
-  --card-bg: #FFFFFF;
-  --primary: #34C759;
-  --text-main: #000000;
-  --text-sub: #8E8E93;
-  --danger: #FF3B30;
-  --nav-height: 90px;
-  --glass-bg: rgba(255, 255, 255, 0.7);
+  --bg-color: #F2F2F7; --card-bg: #FFFFFF; --primary: #34C759;
+  --text-main: #000000; --text-sub: #8E8E93; --danger: #FF3B30;
+  --nav-height: 90px; --glass-bg: rgba(255, 255, 255, 0.7);
 }
-
 [data-theme="dark"] {
-  --bg-color: #000000;
-  --card-bg: #1C1C1E;
-  --text-main: #FFFFFF;
-  --text-sub: #98989D;
-  --glass-bg: rgba(28, 28, 30, 0.75);
+  --bg-color: #000000; --card-bg: #1C1C1E; --text-main: #FFFFFF;
+  --text-sub: #98989D; --glass-bg: rgba(28, 28, 30, 0.75);
 }
+body { margin: 0; background-color: #E5E5EA; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif; color: var(--text-main); overflow: hidden; -webkit-tap-highlight-color: transparent; }
+.app-container { width: 100vw; height: 100vh; max-width: 430px; margin: 0 auto; position: relative; background-color: var(--bg-color); box-shadow: 0 0 40px rgba(0,0,0,0.15); overflow: hidden; transition: background-color 0.3s ease; }
 
-body {
-  margin: 0; background-color: #E5E5EA; 
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
-  color: var(--text-main); overflow: hidden; -webkit-tap-highlight-color: transparent;
-  transition: background-color 0.3s ease;
-}
-
-.app-container {
-  width: 100vw; height: 100vh; max-width: 430px; margin: 0 auto;
-  position: relative; background-color: var(--bg-color);
-  box-shadow: 0 0 40px rgba(0,0,0,0.15); overflow: hidden;
-  transition: background-color 0.3s ease;
-}
-
-/* Typography & Spacing */
-.page {
-  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-  padding: 64px 24px calc(var(--nav-height) + 32px); box-sizing: border-box;
-  overflow-y: auto; opacity: 0; transform: scale(0.97);
-  transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1); pointer-events: none;
-}
+.page { position: absolute; top: 0; left: 0; width: 100%; height: 100%; padding: 64px 24px calc(var(--nav-height) + 32px); box-sizing: border-box; overflow-y: auto; opacity: 0; transform: scale(0.97); transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1); pointer-events: none; }
 .page.active { opacity: 1; transform: scale(1); pointer-events: auto; }
 
 header { margin-bottom: 32px; }
 header h1 { font-size: 34px; font-weight: 800; margin: 0; letter-spacing: -0.8px; }
 .subtitle { color: var(--text-sub); font-size: 16px; margin-top: 6px; font-weight: 500; }
 
-/* Custom Bottom Nav with Floating FAB */
-.bottom-nav {
-  position: absolute; bottom: 0; width: 100%; height: var(--nav-height);
-  background: var(--glass-bg);
-  backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
-  border-top: 0.5px solid rgba(142, 142, 147, 0.2);
-  display: flex; justify-content: space-between; align-items: flex-start;
-  padding: 12px 16px 0; z-index: 100; box-sizing: border-box;
-}
-
-.nav-item { 
-  display: flex; flex-direction: column; align-items: center; 
-  color: var(--text-sub); cursor: pointer; transition: 0.2s; 
-  width: 20%;
-}
+/* Custom Bottom Nav */
+.bottom-nav { position: absolute; bottom: 0; width: 100%; height: var(--nav-height); background: var(--glass-bg); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); border-top: 0.5px solid rgba(142, 142, 147, 0.2); display: flex; justify-content: space-between; align-items: flex-start; padding: 12px 16px 0; z-index: 100; box-sizing: border-box; }
+.nav-item { display: flex; flex-direction: column; align-items: center; color: var(--text-sub); cursor: pointer; transition: 0.2s; width: 20%; }
 .nav-item span { font-size: 10px; font-weight: 600; margin-top: 4px; }
 .nav-item.active { color: var(--primary); }
-
-.nav-fab {
-  width: 56px; height: 56px; border-radius: 50%;
-  background: var(--primary); color: white;
-  display: flex; justify-content: center; align-items: center;
-  transform: translateY(-24px);
-  box-shadow: 0 10px 20px rgba(52, 199, 89, 0.3);
-  cursor: pointer; transition: transform 0.2s;
-}
+.nav-fab { width: 56px; height: 56px; border-radius: 50%; background: var(--text-main); color: var(--bg-color); display: flex; justify-content: center; align-items: center; transform: translateY(-24px); box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15); cursor: pointer; transition: transform 0.2s; }
 .nav-fab:active { transform: translateY(-20px) scale(0.9); }
 
-/* iOS Cards & Inputs */
-.card { 
-  background: var(--card-bg); border-radius: 24px; padding: 24px; 
-  box-shadow: 0 4px 24px rgba(0,0,0,0.04); margin-bottom: 24px; 
-  transition: background 0.3s ease;
-}
+/* UI Cards & Negative Space */
+.card { background: var(--card-bg); border-radius: 24px; padding: 24px; margin-bottom: 24px; transition: background 0.3s ease; }
 
-input, select { 
-  width: 100%; padding: 18px; margin-bottom: 16px; border: none; 
-  background: var(--bg-color); border-radius: 16px; font-size: 16px; 
-  color: var(--text-main); font-weight: 500; outline: none; transition: 0.2s; 
-}
+/* Grid 1:1 cho Macros */
+.macro-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 24px; }
+.macro-box { background: var(--card-bg); aspect-ratio: 1 / 1; border-radius: 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+.macro-box span { font-size: 12px; color: var(--text-sub); font-weight: 600; text-transform: uppercase; margin-bottom: 4px; }
+.macro-box strong { font-size: 20px; font-weight: 800; }
+
+/* Inputs */
+input { width: 100%; padding: 18px; margin-bottom: 16px; border: none; background: var(--bg-color); border-radius: 16px; font-size: 16px; color: var(--text-main); font-weight: 500; outline: none; box-sizing: border-box; }
 input::placeholder { color: var(--text-sub); }
+.input-row { display: flex; gap: 12px; }
 
-.btn-primary { 
-  width: 100%; padding: 18px; background: var(--primary); color: white; 
-  border: none; border-radius: 16px; font-size: 17px; font-weight: 700; 
-  cursor: pointer; transition: 0.2s; box-shadow: 0 8px 16px rgba(52, 199, 89, 0.2);
-}
+.btn-primary { width: 100%; padding: 18px; background: var(--text-main); color: var(--bg-color); border: none; border-radius: 16px; font-size: 17px; font-weight: 700; cursor: pointer; transition: 0.2s; }
 .btn-primary:active { transform: scale(0.96); }
 
-/* Settings List */
-.setting-item { 
-  padding: 18px 0; display: flex; justify-content: space-between; align-items: center; 
-  border-bottom: 0.5px solid rgba(142, 142, 147, 0.2); font-size: 17px; font-weight: 500;
-}
+/* Swipe to Delete List */
+.swipe-container { position: relative; overflow: hidden; border-radius: 16px; margin-bottom: 12px; background: var(--danger); }
+.swipe-content { background: var(--card-bg); padding: 20px; display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 2; transition: transform 0.3s ease; touch-action: pan-y; }
+.swipe-action { position: absolute; right: 0; top: 0; height: 100%; width: 80px; display: flex; justify-content: center; align-items: center; color: white; font-weight: 600; z-index: 1; }
+
+.setting-item { padding: 18px 0; display: flex; justify-content: space-between; align-items: center; border-bottom: 0.5px solid rgba(142, 142, 147, 0.2); font-size: 17px; font-weight: 500;}
 .setting-item:last-child { border-bottom: none; }
 .toggle-switch { width: 50px; height: 30px; background: var(--primary); border-radius: 15px; position: relative; cursor: pointer;}
 .toggle-switch::after { content: ''; position: absolute; width: 26px; height: 26px; background: white; border-radius: 50%; top: 2px; right: 2px; transition: 0.3s;}
