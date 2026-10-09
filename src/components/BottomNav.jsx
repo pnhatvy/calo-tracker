@@ -1,6 +1,6 @@
 import {
   IoHomeOutline,
-  IoCalendarOutline,
+  IoPersonOutline,
   IoTimeOutline,
   IoSettingsOutline,
   IoAddOutline,
@@ -17,11 +17,11 @@ export default function BottomNav({ activeTab, setActiveTab }) {
         <span>Dashboard</span>
       </div>
       <div
-        className={`nav-item ${activeTab === "plan" ? "active" : ""}`}
-        onClick={() => setActiveTab("plan")}
+        className={`nav-item ${activeTab === "profile" ? "active" : ""}`}
+        onClick={() => setActiveTab("profile")}
       >
-        <IoCalendarOutline size={24} />
-        <span>Plan</span>
+        <IoPersonOutline size={24} />
+        <span>Profile</span>
       </div>
 
       {/* Floating Add Button */}

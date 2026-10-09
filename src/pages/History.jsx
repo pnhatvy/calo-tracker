@@ -15,16 +15,15 @@ function SwipeableItem({ item, onDelete }) {
     currentXRef.current = e.touches[0].clientX;
     const diff = currentXRef.current - startXRef.current;
     if (diff < 0 && diff > -100) {
-      // Chỉ cho phép vuốt sang trái tối đa 100px
       setOffsetX(diff);
     }
   };
 
   const handleTouchEnd = () => {
     if (offsetX < -50) {
-      setOffsetX(-80); // Giữ mở menu xoá
+      setOffsetX(-80); // Mở menu xoá
     } else {
-      setOffsetX(0); // Bật ngược lại nếu vuốt chưa đủ lực
+      setOffsetX(0);
     }
   };
 
@@ -46,7 +45,10 @@ function SwipeableItem({ item, onDelete }) {
           >
             {item.name}
           </strong>
-          <span style={{ fontSize: "13px", color: "var(--text-sub)" }}>
+          <span style={{ fontSize: "13px", color: "var(--text-sub)", display: "block", marginBottom: "4px" }}>
+            {item.meal || "Snack"}
+          </span>
+          <span style={{ fontSize: "12px", color: "var(--text-sub)", fontWeight: "600" }}>
             P: {item.protein}g • C: {item.carbs}g • F: {item.fat}g
           </span>
         </div>
@@ -57,8 +59,10 @@ function SwipeableItem({ item, onDelete }) {
 }
 
 export default function History({ isActive, history, setHistory }) {
-  const groupedHistory =
-    history?.reduce((acc, item) => {
+  // Sort history by date descending
+  const sortedHistory = [...history].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+  const groupedHistory = sortedHistory.reduce((acc, item) => {
       if (!acc[item.date]) acc[item.date] = [];
       acc[item.date].push(item);
       return acc;

@@ -1,18 +1,19 @@
 import { useState, useEffect } from "react";
 import Dashboard from "./pages/Dashboard";
 import AddRecord from "./pages/AddRecord";
-import Plan from "./pages/Plan";
+import Profile from "./pages/Profile";
 import History from "./pages/History";
 import Settings from "./pages/Settings";
 import BottomNav from "./components/BottomNav";
+import { format } from "date-fns";
 import "./App.css";
 
-// Dữ liệu mẫu (Mock Data)
 const initialMockData = [
   {
     id: 101,
-    date: new Date().toLocaleDateString("en-US"),
+    date: format(new Date(), "yyyy-MM-dd"),
     name: "Beef Noodles (Phở)",
+    meal: "Breakfast",
     kcal: 650,
     protein: 35,
     carbs: 85,
@@ -20,56 +21,65 @@ const initialMockData = [
   },
   {
     id: 102,
-    date: new Date().toLocaleDateString("en-US"),
+    date: format(new Date(), "yyyy-MM-dd"),
     name: "Iced Milk Coffee",
+    meal: "Snack",
     kcal: 180,
     protein: 3,
     carbs: 30,
     fat: 6,
   },
-  {
-    id: 103,
-    date: new Date().toLocaleDateString("en-US"),
-    name: "Grilled Chicken Salad",
-    kcal: 320,
-    protein: 45,
-    carbs: 12,
-    fat: 10,
-  },
 ];
 
 export default function App() {
   const [activeTab, setActiveTab] = useState("dashboard");
-  const [goal, setGoal] = useState(2000);
-  const [water, setWater] = useState(0); // Tính bằng ml
-  const [history, setHistory] = useState([]);
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(format(new Date(), "yyyy-MM-dd"));
 
-  useEffect(() => {
-    const savedData = JSON.parse(localStorage.getItem("caloAppV3"));
+  const getInitialState = () => {
+    const savedData = JSON.parse(localStorage.getItem("caloAppV4"));
     if (savedData) {
-      setGoal(savedData.goal || 2000);
-      setWater(savedData.water || 0);
-      setHistory(savedData.history || initialMockData);
-      setIsDarkMode(savedData.isDarkMode || false);
-    } else {
-      setHistory(initialMockData);
+      const migratedHistory = (savedData.history || initialMockData).map(h => ({
+        ...h,
+        date: h.date.includes("/") ? format(new Date(h.date), "yyyy-MM-dd") : h.date,
+        meal: h.meal || "Snack"
+      }));
+      return {
+        goal: savedData.goal || 2000,
+        water: savedData.water || 0,
+        history: migratedHistory,
+        isDarkMode: savedData.isDarkMode || false
+      };
     }
-  }, []);
+    return {
+      goal: 2000,
+      water: 0,
+      history: initialMockData,
+      isDarkMode: false
+    };
+  };
+
+  const initialState = getInitialState();
+
+  const [goal, setGoal] = useState(initialState.goal);
+  const [water, setWater] = useState(initialState.water); 
+  const [history, setHistory] = useState(initialState.history);
+  const [isDarkMode, setIsDarkMode] = useState(initialState.isDarkMode);
 
   useEffect(() => {
     localStorage.setItem(
-      "caloAppV3",
+      "caloAppV4",
       JSON.stringify({ goal, water, history, isDarkMode }),
     );
   }, [goal, water, history, isDarkMode]);
 
-  // Reset nước mỗi ngày (Logic đơn giản: nếu record đầu tiên khác ngày nay thì reset)
+  // Reset water daily based on selectedDate
   useEffect(() => {
-    const today = new Date().toLocaleDateString("en-US");
-    const lastRecordDate = history.length > 0 ? history[0].date : today;
-    if (lastRecordDate !== today && water > 0) setWater(0);
-  }, [history, water]);
+    const today = format(new Date(), "yyyy-MM-dd");
+    if (selectedDate !== today) {
+      // Actually water might need to be an array of {date, amount} if we want to track historically
+      // For now, simple implementation
+    }
+  }, [selectedDate]);
 
   return (
     <div className="app-container" data-theme={isDarkMode ? "dark" : "light"}>
@@ -79,14 +89,22 @@ export default function App() {
         history={history}
         water={water}
         setWater={setWater}
+        selectedDate={selectedDate}
+        setSelectedDate={setSelectedDate}
       />
       <AddRecord
         isActive={activeTab === "add"}
         history={history}
         setHistory={setHistory}
         setActiveTab={setActiveTab}
+        selectedDate={selectedDate}
       />
-      <Plan isActive={activeTab === "plan"} />
+      <Profile 
+        isActive={activeTab === "profile"} 
+        goal={goal}
+        setGoal={setGoal}
+        history={history}
+      />
       <History
         isActive={activeTab === "history"}
         history={history}
